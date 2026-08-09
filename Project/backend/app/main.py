@@ -50,11 +50,11 @@ def predict(customer: CustomerInput):
         X = preprocess(customer)
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e))
-    label, prob = mdl.predict(X)
+    label, prob, actual_model = mdl.predict(X, model_name=customer.model_name)
     return PredictionResponse(
         churn_label=label,
         churn_probability=round(prob, 4),
-        model_used=mdl.MODEL_NAME,
+        model_used=actual_model,
     )
 
 
@@ -65,11 +65,24 @@ def dataset_info():
 
 
 @app.get("/model-info", response_model=ModelInfoResponse)
-def model_info():
-    """Returns metadata about the deployed production model."""
+def model_info(model_name: str = "LogisticRegression"):
+    """Returns metadata about the requested model."""
+    metrics = _load_json("metrics.json")
+    if model_name not in metrics:
+        model_name = "LogisticRegression"
+    
+    model_data = metrics[model_name]
+    
+    descriptions = {
+        "LogisticRegression": "Logistic Regression estimates the probability of a customer churning by computing a weighted sum of their feature values and passing it through a sigmoid function that maps any real number to a value between 0 and 1. A threshold of 0.5 is then applied: customers with a predicted probability above 0.5 are classified as likely to churn. The model is interpretable — each feature's coefficient directly reflects its contribution to the churn risk.",
+        "RandomForest": "Random Forest is an ensemble learning method that constructs a multitude of decision trees during training and outputs the mode of the classes for classification. It corrects for decision trees' habit of overfitting to their training set.",
+        "DecisionTree": "Decision Tree builds a classification model in the form of a tree structure. It breaks down a dataset into smaller and smaller subsets while at the same time an associated decision tree is incrementally developed. The final result is a tree with decision nodes and leaf nodes.",
+        "KNN": "K-Nearest Neighbors is a non-parametric method used for classification. A customer is classified by a plurality vote of their neighbors, with the customer being assigned to the class most common among their k nearest neighbors (k is a positive integer, typically small)."
+    }
+    
     return ModelInfoResponse(
-        algorithm="Logistic Regression",
-        params={"max_iter": 1000},
+        algorithm=model_data.get("display_name", model_name),
+        params=model_data.get("params", {}),
         label_encoded_cols=["gender", "Partner", "Dependents", "PhoneService", "PaperlessBilling"],
         onehot_cols=[
             "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup",
@@ -77,15 +90,7 @@ def model_info():
             "PaymentMethod", "Contract",
         ],
         scaled_cols=["tenure", "MonthlyCharges", "TotalCharges"],
-        description=(
-            "Logistic Regression estimates the probability of a customer churning "
-            "by computing a weighted sum of their feature values and passing it "
-            "through a sigmoid function that maps any real number to a value "
-            "between 0 and 1. A threshold of 0.5 is then applied: customers "
-            "with a predicted probability above 0.5 are classified as likely "
-            "to churn. The model is interpretable — each feature's coefficient "
-            "directly reflects its contribution to the churn risk."
-        ),
+        description=descriptions.get(model_name, "Machine Learning model.")
     )
 
 

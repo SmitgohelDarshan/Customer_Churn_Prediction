@@ -8,12 +8,14 @@ export default function ModelInfo() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
+  const [selectedModel, setSelectedModel] = useState('LogisticRegression');
+
   const load = () => {
     setError(null);
-    getModelInfo().then(setData).catch(e => setError(e.message));
+    getModelInfo(selectedModel).then(setData).catch(e => setError(e.message));
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [selectedModel]);
 
   return (
     <main className="page">
@@ -31,6 +33,23 @@ export default function ModelInfo() {
 
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+          {/* Model Selector */}
+          <div className="card" style={{ background: 'rgba(124,111,255,0.05)', borderColor: 'rgba(124,111,255,0.2)' }}>
+             <div className="form-group" style={{ maxWidth: '400px' }}>
+                <label className="form-label">Select Model to View</label>
+                <select 
+                  className="form-control" 
+                  value={selectedModel}
+                  onChange={e => setSelectedModel(e.target.value)}
+                >
+                  <option value="LogisticRegression">Logistic Regression</option>
+                  <option value="RandomForest">Random Forest</option>
+                  <option value="DecisionTree">Decision Tree</option>
+                  <option value="KNN">K-Nearest Neighbors</option>
+                </select>
+             </div>
+          </div>
 
           {/* Algorithm card */}
           <div className="card">

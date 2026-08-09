@@ -61,7 +61,7 @@ export default function Compare() {
       </div>
       <p className="subtitle" style={{ marginBottom: '2rem' }}>
         Side-by-side comparison of all trained models across four key classification metrics.
-        The active production model is highlighted.
+        All models are currently available for live predictions.
       </p>
 
       {error && <ErrorMessage message={error} onRetry={load} />}
@@ -85,8 +85,8 @@ export default function Compare() {
               </thead>
               <tbody>
                 {Object.entries(raw).map(([key, m]) => (
-                  <tr key={key} className={m.is_active ? 'active-row' : ''}>
-                    <td style={{ fontWeight: m.is_active ? 700 : 400, color: m.is_active ? 'var(--accent-teal)' : 'var(--text-secondary)' }}>
+                  <tr key={key}>
+                    <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                       {m.display_name ?? key}
                     </td>
                     <td>{(m.accuracy * 100).toFixed(1)}%</td>
@@ -94,10 +94,7 @@ export default function Compare() {
                     <td>{(m.recall * 100).toFixed(1)}%</td>
                     <td>{(m.f1 * 100).toFixed(1)}%</td>
                     <td>
-                      {m.is_active
-                        ? <span className="section-badge badge-teal">✓ Deployed</span>
-                        : <span className="section-badge" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)' }}>Comparison</span>
-                      }
+                      <span className="section-badge badge-teal">✓ Available</span>
                     </td>
                   </tr>
                 ))}

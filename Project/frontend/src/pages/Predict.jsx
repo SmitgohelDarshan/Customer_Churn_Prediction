@@ -22,6 +22,7 @@ const INITIAL = {
   PaymentMethod: 'Electronic check',
   MonthlyCharges: 70.35,
   TotalCharges: 844.20,
+  model_name: 'LogisticRegression',
 };
 
 function Field({ label, children }) {
@@ -81,6 +82,28 @@ export default function Predict() {
       </p>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+
+        {/* Model Selection */}
+        <div className="card" style={{ background: 'rgba(124,111,255,0.05)', borderColor: 'rgba(124,111,255,0.2)' }}>
+          <div className="section-header">
+            <h3>🧠 Select Model</h3>
+          </div>
+          <div className="form-grid">
+            <Field label="Machine Learning Algorithm">
+              <select 
+                id="model_name" 
+                className="form-control" 
+                value={form.model_name} 
+                onChange={set('model_name')}
+              >
+                <option value="LogisticRegression">Logistic Regression (Default)</option>
+                <option value="RandomForest">Random Forest</option>
+                <option value="DecisionTree">Decision Tree</option>
+                <option value="KNN">K-Nearest Neighbors</option>
+              </select>
+            </Field>
+          </div>
+        </div>
 
         {/* Section 1 — Customer Info */}
         <div className="card">

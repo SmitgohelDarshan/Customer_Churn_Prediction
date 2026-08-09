@@ -19,7 +19,8 @@ export const predict = (customerData) =>
 
 export const getDatasetInfo = () => apiFetch('/dataset-info');
 
-export const getModelInfo = () => apiFetch('/model-info');
+export const getModelInfo = (modelName = 'LogisticRegression') => 
+  apiFetch(`/model-info?model_name=${modelName}`);
 
 export const getMetrics = () => apiFetch('/metrics');
 

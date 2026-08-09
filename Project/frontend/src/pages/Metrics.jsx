@@ -16,14 +16,15 @@ function pct(v) { return `${(v * 100).toFixed(1)}%`; }
 
 export default function Metrics() {
   const [data, setData] = useState(null);
+  const [selectedModel, setSelectedModel] = useState('LogisticRegression');
   const [error, setError] = useState(null);
 
   const load = () => {
     setError(null);
-    getModelMetrics('LogisticRegression').then(setData).catch(e => setError(e.message));
+    getModelMetrics(selectedModel).then(setData).catch(e => setError(e.message));
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [selectedModel]);
 
   const cm = data?.confusion_matrix;
   const [[tn, fp], [fn, tp]] = cm ?? [[0,0],[0,0]];
@@ -32,7 +33,7 @@ export default function Metrics() {
     <main className="page">
       <div className="section-header" style={{ marginBottom: '0.5rem' }}>
         <h1>Model <span className="gradient-text">Metrics</span></h1>
-        <span className="section-badge badge-teal">Logistic Regression</span>
+        <span className="section-badge badge-teal">{data?.display_name || selectedModel}</span>
       </div>
       <p className="subtitle" style={{ marginBottom: '2rem' }}>
         Evaluation metrics for the deployed production model, computed on a held-out
@@ -44,6 +45,23 @@ export default function Metrics() {
 
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
+          {/* Model Selector */}
+          <div className="card" style={{ background: 'rgba(124,111,255,0.05)', borderColor: 'rgba(124,111,255,0.2)' }}>
+             <div className="form-group" style={{ maxWidth: '400px' }}>
+                <label className="form-label">Select Model to View Metrics</label>
+                <select 
+                  className="form-control" 
+                  value={selectedModel}
+                  onChange={e => setSelectedModel(e.target.value)}
+                >
+                  <option value="LogisticRegression">Logistic Regression</option>
+                  <option value="RandomForest">Random Forest</option>
+                  <option value="DecisionTree">Decision Tree</option>
+                  <option value="KNN">K-Nearest Neighbors</option>
+                </select>
+             </div>
+          </div>
 
           {/* Metric stat cards */}
           <div className="stat-grid">

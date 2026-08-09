@@ -26,6 +26,7 @@ class CustomerInput(BaseModel):
     PaymentMethod: str = Field(..., examples=["Electronic check"])
     MonthlyCharges: float = Field(..., examples=[70.35])
     TotalCharges: float = Field(..., examples=[844.2])
+    model_name: str = Field("LogisticRegression", description="Name of the model to use for prediction")
 
 
 # ── Responses ─────────────────────────────────────────────────────────────────
