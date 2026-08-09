@@ -1,0 +1,87 @@
+{
+  "LogisticRegression": {
+    "display_name": "Logistic Regression",
+    "is_active": true,
+    "accuracy": 0.8055,
+    "precision": 0.6572,
+    "recall": 0.5588,
+    "f1": 0.604,
+    "confusion_matrix": [
+      [
+        926,
+        109
+      ],
+      [
+        165,
+        209
+      ]
+    ],
+    "params": {
+      "max_iter": 1000
+    }
+  },
+  "RandomForest": {
+    "display_name": "Random Forest",
+    "is_active": false,
+    "accuracy": 0.7921,
+    "precision": 0.6364,
+    "recall": 0.5053,
+    "f1": 0.5633,
+    "confusion_matrix": [
+      [
+        927,
+        108
+      ],
+      [
+        185,
+        189
+      ]
+    ],
+    "params": {
+      "n_estimators": 100,
+      "random_state": 42
+    }
+  },
+  "DecisionTree": {
+    "display_name": "Decision Tree",
+    "is_active": false,
+    "accuracy": 0.7374,
+    "precision": 0.5054,
+    "recall": 0.4973,
+    "f1": 0.5013,
+    "confusion_matrix": [
+      [
+        853,
+        182
+      ],
+      [
+        188,
+        186
+      ]
+    ],
+    "params": {
+      "random_state": 42
+    }
+  },
+  "KNN": {
+    "display_name": "K-Nearest Neighbors",
+    "is_active": false,
+    "accuracy": 0.763,
+    "precision": 0.5538,
+    "recall": 0.5508,
+    "f1": 0.5523,
+    "confusion_matrix": [
+      [
+        869,
+        166
+      ],
+      [
+        168,
+        206
+      ]
+    ],
+    "params": {
+      "n_neighbors": 5
+    }
+  }
+}
